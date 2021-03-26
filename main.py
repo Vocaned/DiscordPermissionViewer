@@ -39,13 +39,14 @@ if 'vanity_url_code' in guild:
     cprint(f"{a}  Vanity URL    →{b}{guild['vanity_url_code']}")
 print()
 for channel in channels:
-    cprint(f"{a}  Name          →{b}{channel['name']}")
+    cprint(f"{a}  Channel Name      →{b}{channel['name']}")
     if 'parent_id' in channel:
-        cprint(f"{a}  Category      →{b}{getChannel(channel['parent_id'])}")
+        cprint(f"{a}  Category          →{b}{getChannel(channel['parent_id'])}")
     if 'topic' in channel:
-        cprint(f"{a}  Topic         →{b}{channel['topic']}")
-    cprint(f"{a}  Permissions:")
+        cprint(f"{a}  Topic             →{b}{channel['topic']}")
+    cprint(f"{a}  Permissions")
     for perm in channel['permission_overwrites']:
+        if perm['allow'] == 0 and perm['deny'] == 0: continue
         if perm['type'] == 'role':
             cprint(f"{FG.magenta}    Role: {getRolename(perm['id'])}")
         elif perm['type'] == 'member':
@@ -55,3 +56,8 @@ for channel in channels:
             cprint(f"{FG.green}    +{perm['allow']}")
         if perm['deny'] != 0:
             cprint(f"{FG.red}    -{perm['deny']}")
+print()
+for role in guild['roles']:
+    cprint(f"{a}  Role Name        →{b}{role['name']}")
+    cprint(f"{a}  Permissions      →{b}{role['permissions']}")
+    cprint(f"{a}  Color            →{b}{role['color']}")
