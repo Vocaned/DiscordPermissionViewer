@@ -3,6 +3,7 @@ import os
 import time
 import requests
 import threading
+import typing
 from http.server import HTTPServer, BaseHTTPRequestHandler
 
 tokenTemp = None
@@ -112,3 +113,44 @@ class Text:
 def cprint(value):
 	"""Safely print with colors"""
 	print(value, end=Text.reset + "\n")
+
+permissions = {
+    0x00000001: "Create Instant Invite",
+    0x00000002: "Kick Members",
+    0x00000004: "Ban Members",
+    0x00000008: "Administrator",
+	0x00000010: "Manage Channels",
+    0x00000020: "Manage Guild",
+    0x00000040: "Add Reactions",
+    0x00000080: "View Audit Log",
+	0x00000100: "Priority Speaker",
+    0x00000200: "Stream",
+    0x00000400: "View Channel",
+    0x00000800: "Send Messages",
+    0x00001000: "Send TTS Messages",
+    0x00002000: "Manage Messages",
+    0x00004000: "Embed Links",
+    0x00008000: "Attach Files",
+    0x00010000: "Read Message History",
+    0x00020000: "Mention Everyone",
+    0x00040000: "Use External Emojis",
+    0x00080000: "View Guild Insights",
+    0x00100000: "Connect",
+    0x00200000: "Speak",
+    0x00400000: "Mute Members",
+    0x00800000: "Deafen Members",
+    0x01000000: "Move Members",
+	0x02000000: "Use Voice Activity",
+    0x04000000: "Change Nickname",
+    0x08000000: "Manage Nicknames",
+    0x10000000: "Manage Roles",
+    0x20000000: "Manage Webhooks",
+    0x40000000: "Manage Emojis"
+}
+
+def permissionToString(num: int) -> typing.List[str]:
+    perms = []
+    for k,v in permissions.items():
+        if (num & k) == k:
+            perms.append(v)
+    return perms

@@ -1,5 +1,5 @@
 import requests
-from Utils import getConfig, getHeader, cprint, FG
+from Utils import getConfig, getHeader, cprint, FG, permissionToString
 
 guildID = input('Guild ID: ')
 token = getConfig()['token']
@@ -53,11 +53,17 @@ for channel in channels:
             cprint(f"{FG.magenta}    Member: {getUsername(perm['id'])}")
 
         if perm['allow'] != 0:
-            cprint(f"{FG.green}    +{perm['allow']}")
+            for permstring in permissionToString(perm['allow']):
+                cprint(f"{FG.green}    +{permstring}")
         if perm['deny'] != 0:
-            cprint(f"{FG.red}    -{perm['deny']}")
+            for permstring in permissionToString(perm['deny']):
+                cprint(f"{FG.red}    -{permstring}")
 print()
+
 for role in guild['roles']:
     cprint(f"{a}  Role Name        →{b}{role['name']}")
-    cprint(f"{a}  Permissions      →{b}{role['permissions']}")
     cprint(f"{a}  Color            →{b}{role['color']}")
+    cprint(f"{a}  Permissions")
+    for permstring in permissionToString(role['permissions']):
+                cprint(f"{FG.green}      +{b}{permstring}")
+    print()
