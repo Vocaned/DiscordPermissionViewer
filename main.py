@@ -17,7 +17,7 @@ def getRolename(id: str) -> str:
 def getChannel(id: str) -> str:
     for chan in channels:
         if chan['id'] == id:
-            return channel['name']
+            return chan['name']
 
 usercache = {}
 def getUsername(id: str) -> str:
@@ -39,12 +39,18 @@ if 'vanity_url_code' in guild:
     cprint(f"{a}  Vanity URL    →{b}{guild['vanity_url_code']}")
 print()
 for channel in channels:
-    cprint(f"{a}  Channel Name      →{b}{channel['name']}")
-    if 'parent_id' in channel:
+    chantype = 'Channel'
+    if channel['type'] == 2: chantype = 'Voice Chat'
+    if channel['type'] == 4: chantype = 'Category'
+
+    cprint(f"{a}  {chantype} Name      →{b}{channel['name']}")
+    cprint(f"{a}  ID                   →{b}{channel['id']}")
+    if 'parent_id' in channel and channel['parent_id']:
         cprint(f"{a}  Category          →{b}{getChannel(channel['parent_id'])}")
-    if 'topic' in channel:
+    if 'topic' in channel and channel['topic']:
         cprint(f"{a}  Topic             →{b}{channel['topic']}")
-    cprint(f"{a}  Permissions")
+    if len(channel['permission_overwrites']) > 0:
+        cprint(f"{a}  Permissions")
     for perm in channel['permission_overwrites']:
         if perm['allow'] == 0 and perm['deny'] == 0: continue
         if perm['type'] == 'role':
@@ -58,10 +64,11 @@ for channel in channels:
         if perm['deny'] != 0:
             for permstring in permissionToString(perm['deny']):
                 cprint(f"{FG.red}    -{permstring}")
-print()
+    print()
 
 for role in guild['roles']:
     cprint(f"{a}  Role Name        →{b}{role['name']}")
+    cprint(f"{a}  ID               →{b}{role['id']}")
     cprint(f"{a}  Color            →{b}{role['color']}")
     cprint(f"{a}  Permissions")
     for permstring in permissionToString(role['permissions']):
